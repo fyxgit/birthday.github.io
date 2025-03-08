@@ -38,7 +38,11 @@
     </style>
 </head>
 <body>
-<audio id="bg-music" src="https://www.bensound.com/bensound-music/bensound-birthday.mp3" preload="auto" playsinline webkit-playsinline></audio>
+<!-- 使用 SoundHelix 示例音频文件 -->
+<audio id="bg-music" preload="auto" playsinline webkit-playsinline>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
+    您的浏览器不支持音频播放。
+</audio>
 <div class="container">
     <h1>🎉 生日快乐！🎂</h1>
     <p class="message">愿你笑容常在，幸福美满！🎁🎈</p>
@@ -51,14 +55,13 @@
         var message = document.querySelector('.message');
         var button = document.querySelector('.btn');
 
-        // 先显示祝福信息并隐藏按钮
+        // 显示祝福信息并隐藏按钮
         message.style.display = 'block';
         button.style.display = 'none';
 
-        // 尝试播放音乐
         audio.play().catch(function(err) {
             console.log("播放错误:", err);
-            alert("音频播放失败，请手动点击播放音乐或在浏览器中打开页面。");
+            alert("音频播放失败，请尝试手动点击播放音乐或在浏览器中打开页面。");
         });
     }
 </script>
