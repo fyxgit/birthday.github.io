@@ -1,70 +1,155 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>生日快乐！</title>
     <style>
         body {
-            text-align: center;
-            background: url('https://source.unsplash.com/1080x1920/?birthday') no-repeat center center/cover;
-            color: white;
-            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+            overflow: hidden;
+            background: #1a1a2e;
+            position: relative;
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
         }
         .container {
-            margin-top: 30vh;
+            z-index: 1;
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(255, 105, 180, 0.7);
         }
         h1 {
-            font-size: 2.5em;
-            animation: fadeIn 2s ease-in-out;
+            font-size: 40px;
+            margin: 0;
+            text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493;
+            animation: glow 2s infinite alternate;
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
         }
-        .message {
-            font-size: 1.5em;
-            display: none;
+        h1:hover {
+            transform: rotateY(180deg);
+        }
+        p {
+            font-size: 20px;
+            margin: 10px 0;
+            opacity: 0;
+            animation: fadeIn 2s ease-in forwards;
+            animation-delay: 1s;
+        }
+        .cake {
+            font-size: 60px;
+            animation: float 3s ease-in-out infinite;
+            text-shadow: 0 0 15px #ffd700;
+        }
+        #musicToggle {
+            margin-top: 20px;
+            padding: 12px 25px;
+            font-size: 16px;
+            background: linear-gradient(45deg, #ff69b4, #ff1493);
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 0 15px #ff69b4;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        #musicToggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px #ff1493;
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493; }
+            to { text-shadow: 0 0 20px #ff69b4, 0 0 40px #ff1493; }
         }
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .btn {
-            background: #ff4081;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 1.2em;
-            border-radius: 5px;
-            cursor: pointer;
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(5deg); }
         }
     </style>
 </head>
 <body>
-<!-- 使用来自 Pixabay 的生日主题音乐 -->
-<audio id="bg-music" preload="auto" playsinline webkit-playsinline>
-    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_8aa9f2b324.mp3?filename=birthday-song-127568.mp3" type="audio/mp3">
-    您的浏览器不支持音频播放。
-</audio>
-
+<canvas id="particleCanvas"></canvas>
 <div class="container">
-    <h1>🎉 生日快乐！🎂</h1>
-    <p class="message">愿你笑容常在，幸福美满！🎁🎈</p>
-    <button class="btn" onclick="playMusic()">点击查看祝福</button>
+    <h1>生日快乐，语燕呢楠！🎉</h1>
+    <p>开心每一天！</p>
+    <p>点我播放《Song from a Secret Garden》！</p>
+    <div class="cake">🎂</div>
+    <button id="musicToggle">播放生日音乐</button>
 </div>
 
 <script>
-    function playMusic() {
-        var audio = document.getElementById('bg-music');
-        var message = document.querySelector('.message');
-        var button = document.querySelector('.btn');
+    // 粒子背景
+    const canvas = document.getElementById("particleCanvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-        // 显示祝福信息并隐藏按钮
-        message.style.display = 'block';
-        button.style.display = 'none';
-
-        audio.play().catch(function(err) {
-            console.log("播放错误:", err);
-            alert("音频播放失败，请尝试手动点击播放音乐或在浏览器中打开页面。");
+    const particles = [];
+    for (let i = 0; i < 100; i++) {
+        particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            radius: Math.random() * 3 + 1,
+            speed: Math.random() * 2 + 1,
+            color: `hsl(${Math.random() * 360}, 100%, 50%)`
         });
     }
+
+    function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+            p.y += p.speed;
+            if (p.y > canvas.height) p.y = -p.radius;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+            ctx.fillStyle = p.color;
+            ctx.fill();
+        });
+        requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    // 音乐控制
+    const audio = new Audio("https://samplelib.com/lib/preview/mp3/sample-15s.mp3"); // 占位音乐，需替换
+    // const audio = new Audio("./color_of_shadows.mp4"); // 占位音乐，需替换
+    audio.loop = true;
+    let isPlaying = false;
+
+    const musicToggle = document.getElementById("musicToggle");
+    musicToggle.addEventListener("click", () => {
+        if (isPlaying) {
+            audio.pause();
+            musicToggle.textContent = "播放生日音乐";
+        } else {
+            audio.play().then(() => {
+                musicToggle.textContent = "暂停音乐";
+            }).catch(err => {
+                console.error("播放失败:", err);
+                alert("音乐播放失败，请检查网络或稍后重试");
+            });
+        }
+        isPlaying = !isPlaying;
+    });
 </script>
 </body>
 </html>
