@@ -90,11 +90,11 @@
 <body>
 <canvas id="particleCanvas"></canvas>
 <div class="container">
-    <h1>生日快乐，语燕呢楠！🎉</h1>
-    <p>开心每一天！</p>
-    <p>点我播放《Song from a Secret Garden》！</p>
+    <h1>🎉 生日快乐，语燕呢楠！🎉</h1>
+    <p>祝你开心每一天！</p>
+    <p>Secret Garden《Color of Shadows》！</p>
     <div class="cake">🎂</div>
-    <button id="musicToggle">播放生日音乐</button>
+    <button id="musicToggle">点我播放生日音乐</button>
 </div>
 
 <script>
@@ -130,8 +130,8 @@
     animateParticles();
 
     // 音乐控制
-    const audio = new Audio("https://samplelib.com/lib/preview/mp3/sample-15s.mp3"); // 占位音乐，需替换
-    // const audio = new Audio("./color_of_shadows.mp4"); // 占位音乐，需替换
+    // const audio = new Audio("https://samplelib.com/lib/preview/mp3/sample-15s.mp3"); // 占位音乐，需替换
+    const audio = new Audio("./color_of_shadows.mp3"); // 占位音乐，需替换
     audio.loop = true;
     let isPlaying = false;
 
