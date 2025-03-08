@@ -38,7 +38,7 @@
     </style>
 </head>
 <body>
-<audio id="bg-music" src="https://www.bensound.com/bensound-music/bensound-birthday.mp3" preload="auto"></audio>
+<audio id="bg-music" src="https://www.bensound.com/bensound-music/bensound-birthday.mp3" preload="auto" playsinline webkit-playsinline></audio>
 <div class="container">
     <h1>🎉 生日快乐！🎂</h1>
     <p class="message">愿你笑容常在，幸福美满！🎁🎈</p>
@@ -47,16 +47,18 @@
 
 <script>
     function playMusic() {
-        let audio = document.getElementById('bg-music');
-        let message = document.querySelector('.message');
-        let button = document.querySelector('.btn');
+        var audio = document.getElementById('bg-music');
+        var message = document.querySelector('.message');
+        var button = document.querySelector('.btn');
 
-        audio.play().then(() => {
-            message.style.display = 'block';
-            button.style.display = 'none';
-        }).catch(error => {
-            console.log("音乐播放失败：", error);
-            alert("请手动点击播放音乐 🎵");
+        // 先显示祝福信息并隐藏按钮
+        message.style.display = 'block';
+        button.style.display = 'none';
+
+        // 尝试播放音乐
+        audio.play().catch(function(err) {
+            console.log("播放错误:", err);
+            alert("音频播放失败，请手动点击播放音乐或在浏览器中打开页面。");
         });
     }
 </script>
